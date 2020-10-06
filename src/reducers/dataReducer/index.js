@@ -1,30 +1,22 @@
-import {FETCH_DATA_BEGIN, FETCH_DATA_SUCCESS, FETCH_DATA_FAIL} from '../../constants/actionTypes';
 import initialState from '../initialState';
 
-const defaultState = {
-  data: {},
-  loading: false,
-  loaded: false,
-  error: null
-}
-
-const fetchDataReducer = (state = defaultState, action) => {
+export const fetchDataReducer = (state, action, name) => {
   switch (action.type) {
-    case FETCH_DATA_BEGIN: 
+    case `FETCH_${name}_BEGIN`: 
       return {
         ...state,
         loading: true,
         loaded: false,
         error: null
       };
-    case FETCH_DATA_SUCCESS:
+    case `FETCH_${name}_SUCCESS`:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.payload.data
       };
-      case FETCH_DATA_FAIL:
+      case `FETCH_${name}_FAIL`:
         return {
           ...state,
           loading: false,
@@ -36,18 +28,16 @@ const fetchDataReducer = (state = defaultState, action) => {
   }
 };
 
-const dataReducer = (reducerName) => {
-  return (state, action) => {
+export const dataReducer = (reducer, reducerName) => {
+  return (state = initialState[reducerName], action) => {
     const { name } = action;
     const isInitializationCall = state === undefined;
     if (name !== reducerName && !isInitializationCall) {
       return {
-        ...defaultState,
-        error: new Error('Invalid data resources')
+        ...state,
+        error: new Error(`Invalid data: action: ${name}, reducer: ${reducerName}`)
       }
     }
-    return fetchDataReducer(state, action);  
+    return reducer(state, action, name);  
   }
 };
-
-export default dataReducer;

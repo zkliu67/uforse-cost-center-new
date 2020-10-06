@@ -5,7 +5,9 @@ const baseDataState = {
   error: null
 }
 
-export default {
+const initialState = {
   lessons: baseDataState,
   courses: baseDataState
-};
+}
+
+export default initialState;

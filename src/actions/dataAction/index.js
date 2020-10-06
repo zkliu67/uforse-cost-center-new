@@ -3,40 +3,40 @@ import api from '../../utils/api';
 
 export function fetchData(dataNameAPI) {
   return async dispatch => {
-    dispatch(fetchAllDataBegin(dataNameAPI));
+    await dispatch(fetchAllDataBegin(dataNameAPI));
 
-    function onSuccess(dataName, response) {
-      dispatch(fetchAllDataSuccess(dataName, response));
+    async function onSuccess(dataName, response) {
+      await dispatch(fetchAllDataSuccess(dataName, response));
       return response;
     }
 
-    function onFailed(dataName, err) {
-      dispatch(fetchAllDataFailed(dataName, err));
+    async function onFailed(dataName, err) {
+      await dispatch(fetchAllDataFailed(dataName, err));
       return err;
     }
 
     try {
-      const response = await api.get(`/lessons`);
-      onSuccess(dataNameAPI, response);
+      const response = await api.get(`/${dataNameAPI}`);
+      await onSuccess(dataNameAPI, response);
     } catch (err) {
-      onFailed(dataNameAPI, err);
+      await onFailed(dataNameAPI, err);
     }
   }
 }
 
-export const fetchAllDataBegin = (dataName) => ({
-  type: ActionTypes.FETCH_DATA_BEGIN,
+const fetchAllDataBegin = (dataName) => ({
+  type: `FETCH_${dataName}_BEGIN`,
   name: dataName
 });
 
-export const fetchAllDataSuccess = (dataName, data) => ({
-  type: ActionTypes.FETCH_DATA_SUCCESS,
+const fetchAllDataSuccess = (dataName, data) => ({
+  type: `FETCH_${dataName}_SUCCESS`,
   name: dataName,
   payload: data
 });
 
-export const fetchAllDataFailed = (dataName, error) => ({
-  type: ActionTypes.FETCH_DATA_FAIL,
+const fetchAllDataFailed = (dataName, error) => ({
+  type: `FETCH_${dataName}_FAIL`,
   name: dataName,
   payload: error
 })

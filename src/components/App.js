@@ -7,22 +7,35 @@ import PropTypes from "prop-types";
 import React from "react";
 import { hot } from "react-hot-loader";
 
+import Header from './Header';
 import Dashboard from './layouts/Dashboard';
+
+import { Tabs, Tab } from '@material-ui/core';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 
+const routers = [
+  { label: 'UFORSE EDUCATION',
+    link: '/',
+    component: HomePage
+  },
+  { label: 'Dashboard',
+    link: '/dashboard',
+    component: Dashboard
+  },
+  { label: 'About',
+    link: '/about',
+    component: AboutPage
+  },
+]
+
 class App extends React.Component {
   render() {
-    const activeStyle = { color: 'blue' };
     return (
       <React.Fragment>
-        <div className="header">
-          <NavLink exact to="/" activeStyle={activeStyle}>UFORSE PORTAL</NavLink>
-          <NavLink to="/dashboard" activeStyle={activeStyle}>Dashboard</NavLink>
-          <NavLink to="/about" activeStyle={activeStyle}>Performance</NavLink>
-        </div>
+        <Header routers={routers} />
         <div className="main-container">
           <Switch>
             <Route exact path="/" component={HomePage} />

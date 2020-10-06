@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { object, func, bool } from 'prop-types';
-import { LESSONS } from '../../constants/dataTypes';
+import { LESSONS, STUDENTS, COURSES } from '../../constants/dataTypes';
 import { fetchData } from '../../actions/dataAction';
-import { fetchLessons } from '../../actions/lessonAction';
+import api from '../../utils/api';
 import TableView from '../containers/TableView';
+
+import moment from 'moment';
+import { Button } from '@material-ui/core';
 
 class UpComingLesson extends Component {
 
@@ -12,35 +15,55 @@ class UpComingLesson extends Component {
     await this.props.fetchData(LESSONS);
   }
 
-  // getLessonList = async () => {
-  //   await this.props.fetchLessons();
-  // }
+  getLessonDetail = (lesson) => {
+    // get course name
+    // get students name (map function)
+    return {
+      Date: moment(lesson["start_time"]).format('MM-DD-YYYY'),
+      Time: "time",
+      Course: lesson.course.name,
+      Type: lesson.lesson_type,
+      Location: lesson.school_location.name,
+      Students: lesson.lesson_students.map(student => {
+        student.student.id
+      })
+    }
+  }
+
+  getLessonStudent = async () => {
+    
+  }
+
+  getTableData = (lessons) => {
+    return {
+      tableCols: ["Date", "Time", "Course", "Type", "Location", "Students"],
+      data: lessons.data.map(lesson => this.getLessonDetail(lesson)),
+    }
+    // return lessons.map(lesson => {
+    //   lesson
+    // })
+  }
 
   render() {
-    const { lessons, loaded, loading, error } = this.props;
-    if (loaded) {
+    const { lessons } = this.props;
+    if (lessons.loaded) {
       return (
-        <TableView data={lessons} />
+        <TableView data={this.getTableData(lessons.data)} />
       )  
     }
-    
+    return <p>Loading...</p>
   }
 }
 
 UpComingLesson.propTypes = {
   fetchData: func.isRequired,
   lessons: object,
-  loading: bool,
-  loaded: bool,
-  error: object,
   classes: object
 }
 
 const mapStateToProps = (state) => (
-  { lessons: state.lessons.data,
-    loading: state.lessons.loading,
-    loaded: state.lessons.loaded,
-    error: state.lessons.error
+  { lessons: state.lessons, // a list
+    students: state.students
   }
 )
 
