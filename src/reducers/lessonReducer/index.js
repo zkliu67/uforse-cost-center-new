@@ -1,5 +1,4 @@
 import {FETCH_LESSON_BEGIN, FETCH_LESSON_SUCCESS, FETCH_LESSON_FAIL} from '../../constants/actionTypes';
-import initialState from '../initialState';
 
 const defaultState = {
   data: {},

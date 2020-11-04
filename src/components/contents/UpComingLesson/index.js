@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { object, func, bool } from 'prop-types';
-import { LESSONS, STUDENTS, COURSES } from '../../constants/dataTypes';
-import { fetchData } from '../../actions/dataAction';
-import api from '../../utils/api';
-import TableView from '../containers/TableView';
+import { LESSONS } from '../../../constants/dataTypes';
+import { fetchData } from '../../../actions/dataAction';
+import TableView from '../../containers/TableView';
 
 import moment from 'moment';
-import { Button } from '@material-ui/core';
 
 class UpComingLesson extends Component {
 
@@ -20,12 +18,12 @@ class UpComingLesson extends Component {
     // get students name (map function)
     return {
       Date: moment(lesson["start_time"]).format('MM-DD-YYYY'),
-      Time: "time",
+      Time: `${moment(lesson["start_time"]).format('HH:mm')} - ${moment(lesson["end_time"]).format('HH:mm')}`,
       Course: lesson.course.name,
       Type: lesson.lesson_type,
       Location: lesson.school_location.name,
-      Students: lesson.lesson_students.map(student => {
-        student.student.id
+      Students: lesson.students.map(student => {
+        student.id
       })
     }
   }
@@ -36,6 +34,7 @@ class UpComingLesson extends Component {
 
   getTableData = (lessons) => {
     return {
+      title: "Upcoming Lessons",
       tableCols: ["Date", "Time", "Course", "Type", "Location", "Students"],
       data: lessons.data.map(lesson => this.getLessonDetail(lesson)),
     }

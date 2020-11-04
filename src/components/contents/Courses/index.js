@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { object, func } from 'prop-types';
-import { COURSES } from '../../constants/dataTypes';
-import { fetchLesson, fetchData } from '../../actions/dataAction';
-import TableView from '../containers/TableView';
+import { COURSES } from '../../../constants/dataTypes';
+import { fetchLesson, fetchData } from '../../../actions/dataAction';
+import TableView from '../../containers/TableView';
 
 class Courses extends Component {
   async componentDidMount() {
@@ -15,13 +15,13 @@ class Courses extends Component {
     // get students name (map function)
     return {
       Subject: course.subject.name,
-      Name:course.systems.map(sys=>sys.name),
-      Tag: course.tags
+      Name:course.systems.map(sys=>sys.name)
     }
   }
 
   getTableData = (courses) => {
     return {
+      title: "Courses",
       tableCols: ["Subject", "Name", "Tag", "Type"],
       data: courses.data.map(course=>this.getDataDetail(course))
     }

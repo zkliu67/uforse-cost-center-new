@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { func, object } from 'prop-types';
-import { fetchUser } from '../../actions/adminAction';
-import UpComingLesson from '../contents/UpComingLesson';
-import Courses from '../contents/Courses';
-import Notifications from '../contents/Notifications';
-import Onboarding from '../contents/Onboarding';
+import { fetchUser } from '../../../actions/adminAction';
+import ProgressBar from '../../contents/ProgressBar';
+import UpComingLesson from '../../contents/UpComingLesson';
+import Courses from '../../contents/Courses';
+import Notifications from '../../contents/Notifications';
+import Onboarding from '../../contents/Onboarding';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 
@@ -22,19 +23,13 @@ const styles = (theme) => ({
     // textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  marginRight: {
-    marginRight: theme.spacing(2)
-  },
-  marginBottom: {
-    marginBottom: theme.spacing(2)
-  }
 });
 
 // get courses list
-class Dashboard extends Component {
+class Performance extends Component {
   
   async componentDidMount() {
-    await this.props.fetchUser(1);
+    await this.props.fetchUser(3);
   }
 
   render() {
@@ -46,27 +41,15 @@ class Dashboard extends Component {
           <Grid container>
             <Grid item xs={12} sm={8}>
               <div className={classes.paper}>
-                <UpComingLesson admin={adminInfo} />
+                <ProgressBar />
               </div>
               <div className={classes.paper}>
                 <Onboarding />
               </div>
-              <Grid container className={classes.marginBottom}>
-                <Grid item className={classes.item} xs={12} sm={6}>
-                <div className={classes.paper}>
-                  <Courses />
-                </div>
-                </Grid>
-                <Grid item className={classes.item} xs={12} sm={6}>
-                  <div className={classes.paper}>
-                    <Courses />
-                  </div>
-                </Grid>
-              </Grid>
             </Grid>
             <Grid item className={classes.item} xs={12} sm={4}>
               <div className={classes.paper}>
-                <Notifications marginRight={true} />
+                <Notifications />
               </div>
             </Grid>
           </Grid>
@@ -80,7 +63,7 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.propTypes = {
+Performance.propTypes = {
   fetchUser: func.isRequired,
   admin: object,
   classes: object
@@ -90,5 +73,5 @@ const mapStateToProps = (state) => ({
   admin: state.admin
 })
 
-export default connect(mapStateToProps, {fetchUser})(withStyles(styles)(Dashboard));
+export default connect(mapStateToProps, {fetchUser})(withStyles(styles)(Performance));
 // export default Dashboard

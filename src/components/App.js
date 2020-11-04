@@ -1,56 +1,77 @@
 /* eslint-disable import/no-named-as-default */
-import { NavLink, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import AboutPage from "./AboutPage";
 import HomePage from "./HomePage";
 import NotFoundPage from "./NotFoundPage";
-import PropTypes from "prop-types";
+import PropTypes, { object } from "prop-types";
 import React from "react";
 import { hot } from "react-hot-loader";
+import { withStyles } from '@material-ui/core/styles'
 
-import Header from './Header';
+import Header from './layouts/Header';
 import Dashboard from './layouts/Dashboard';
-
-import { Tabs, Tab } from '@material-ui/core';
+import Performance from './layouts/Performance';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 
 const routers = [
-  { label: 'UFORSE EDUCATION',
+  { id: 1,
+    label: 'UFORSE EDUCATION',
     link: '/',
     component: HomePage
   },
-  { label: 'Dashboard',
+  { id: 2,
+    label: 'Dashboard',
     link: '/dashboard',
     component: Dashboard
   },
-  { label: 'About',
+  { id: 3,
+    label: 'Performance',
+    link: '/performance',
+    component: Performance
+  },
+  { id: 4,
+    label: 'About',
     link: '/about',
     component: AboutPage
   },
 ]
 
+const style = (theme) => ({
+  root: {
+    // padding: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  }
+});
+
 class App extends React.Component {
   render() {
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <Header routers={routers} />
-        <div className="main-container">
+        <section className={classes.root}>
           <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/about" component={AboutPage} />
+            {routers.map(router => {
+              if (router.id == 1) {
+                return <Route exact key={router.id} path={router.link} component={router.component}  />
+              } else {
+                return <Route key={router.id} path={router.link} component={router.component}  />
+              }
+            })}
             <Route component={NotFoundPage} />
           </Switch>
-        </div>
+        </section>
       </React.Fragment>
     );
   }
 }
 
 App.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.element,
+  classes: object
 };
 
-export default hot(module)(App);
+export default hot(module)(withStyles(style)(App));

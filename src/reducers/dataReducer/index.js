@@ -10,6 +10,9 @@ export const fetchDataReducer = (state, action, name) => {
         error: null
       };
     case `FETCH_${name}_SUCCESS`:
+      // if (name === 'onboarding_steps') {
+      //   console.log(action.payload);
+      // }
       return {
         ...state,
         loading: false,
